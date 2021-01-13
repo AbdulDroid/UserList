@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">FairMoneyUser</string>
+
+    <string name="first_fragment_label">User List Fragment</string>
+    <string name="second_fragment_label">User Detail Fragment</string>
+
+    <string name="user_image">User Image</string>
+    <string name="phone">Phone:</string>
+    <string name="dob">Date of Birth:</string>
+    <string name="register_date">Register Date:</string>
+    <string name="location">Location:</string>
+    <string name="loading_please_wait">Loading, Please wait…</string>
+    <string name="gender">Gender: </string>
+</resources>

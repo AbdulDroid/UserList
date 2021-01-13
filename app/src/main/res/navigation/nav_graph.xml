@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/UserListFragment">
+
+    <fragment
+        android:id="@+id/UserListFragment"
+        android:name="com.test.fairmoney.view.fragments.UserListFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_user_list">
+
+        <action
+            android:id="@+id/to_UserDetailFragment"
+            app:destination="@id/UserDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/UserDetailFragment"
+        android:name="com.test.fairmoney.view.fragments.UserDetailFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_user_detail">
+
+        <action
+            android:id="@+id/to_UserListFragment"
+            app:destination="@id/UserListFragment" />
+
+        <argument
+            android:name="user"
+            app:argType="com.test.fairmoney.model.local.entities.User" />
+    </fragment>
+</navigation>

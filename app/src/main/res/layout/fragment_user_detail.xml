@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.UserDetailFragment">
+
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/user_image"
+        android:maxHeight="350dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="center"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_image"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/user_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:autoLink="email"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="center"
+        android:textColorLink="@color/colorLink"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_name"
+        tools:text="@tools:sample/cities" />
+
+    <TextView
+        android:id="@+id/phone_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="start"
+        android:text="@string/phone"
+        android:textColor="@color/colorTextLight"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/dob_head"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_email" />
+
+    <TextView
+        android:id="@+id/dob_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="start"
+        android:text="@string/dob"
+        android:textColor="@color/colorTextLight"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/phone_head"
+        app:layout_constraintTop_toBottomOf="@id/user_email" />
+
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:autoLink="phone"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/pt_sans_regular"
+        android:gravity="start"
+        android:textColor="@color/colorText"
+        android:textColorLink="@color/colorLink"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/dob"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phone_head"
+        tools:text="@tools:sample/us_phones" />
+
+    <TextView
+        android:id="@+id/dob"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pt_sans_regular"
+        android:gravity="start"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/phone"
+        app:layout_constraintTop_toBottomOf="@id/dob_head"
+        tools:text="@tools:sample/date/ddmmyy" />
+
+    <TextView
+        android:id="@+id/reg_date_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="start"
+        android:text="@string/register_date"
+        android:textColor="@color/colorTextLight"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/location_head"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phone" />
+
+    <TextView
+        android:id="@+id/location_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="start"
+        android:text="@string/location"
+        android:textColor="@color/colorTextLight"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reg_date_head"
+        app:layout_constraintTop_toBottomOf="@id/dob" />
+
+    <TextView
+        android:id="@+id/reg_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/pt_sans_regular"
+        android:gravity="start"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reg_date_head"
+        tools:text="@tools:sample/date/mmddyy" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/pt_sans_regular"
+        android:gravity="start"
+        android:maxLines="4"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reg_date"
+        app:layout_constraintTop_toBottomOf="@id/location_head"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/gender_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/pt_sans_bold"
+        android:gravity="start"
+        android:text="@string/gender"
+        android:textColor="@color/colorTextLight"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/reg_date_head"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reg_date" />
+
+    <TextView
+        android:id="@+id/gender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/pt_sans_regular"
+        android:gravity="start"
+        android:textColor="@color/colorText"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/reg_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gender_head"
+        tools:text="@tools:sample/first_names" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/detailGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="location,location_head,reg_date,reg_date_head,dob,dob_head,phone_head,phone,gender,gender_head" />
+
+    <include
+        layout="@layout/content_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
