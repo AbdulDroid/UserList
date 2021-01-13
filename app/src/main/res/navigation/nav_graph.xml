@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/UserListFragment"
-        android:name="com.user.list.view.fragments.UserListFragment"
+        android:name="com.test.fairmoney.view.fragments.UserListFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_user_list">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/UserDetailFragment"
-        android:name="com.user.list.view.fragments.UserDetailFragment"
+        android:name="com.test.fairmoney.view.fragments.UserDetailFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_user_detail">
 
@@ -27,6 +27,6 @@
 
         <argument
             android:name="user"
-            app:argType="com.user.list.model.local.entities.User" />
+            app:argType="com.test.fairmoney.model.local.entities.User" />
     </fragment>
 </navigation>

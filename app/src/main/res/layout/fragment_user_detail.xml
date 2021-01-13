@@ -12,34 +12,12 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="@string/user_image"
-        android:scaleType="centerCrop"
         android:maxHeight="350dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
-
-    <View
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:background="@drawable/back_arrow_overlay"
-        app:layout_constraintEnd_toEndOf="@+id/user_image"
-        app:layout_constraintStart_toStartOf="@+id/user_image"
-        app:layout_constraintBottom_toBottomOf="@+id/user_image"
-        app:layout_constraintTop_toTopOf="@+id/user_image"/>
-
-    <ImageView
-        android:id="@+id/back_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:background="?attr/selectableItemBackground"
-        android:padding="8dp"
-        android:contentDescription="@string/back_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_back_arrow" />
 
     <TextView
         android:id="@+id/user_name"
@@ -244,7 +222,6 @@
         app:constraint_referenced_ids="location,location_head,reg_date,reg_date_head,dob,dob_head,phone_head,phone,gender,gender_head" />
 
     <include
-        android:id="@+id/container"
         layout="@layout/content_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
