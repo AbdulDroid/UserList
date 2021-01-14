@@ -16,10 +16,10 @@ class UserDetailViewModel @Inject constructor(
     fun getUser(isConnected: Boolean, userId: String) {
         loadResult {
             val response = repo.getUser(isConnected, userId)
-            if (response.first != null) {
-                _user.postValue(response.first)
+            if (response.data != null) {
+                _user.postValue(response.data)
             } else {
-                throw Exception(response.second ?: "An Error Occurred")
+                throw Exception(response.errorMessage ?: "An Error Occurred")
             }
         }
     }
