@@ -2,33 +2,44 @@ package com.test.fairmoney.model.repositories
 
 import com.test.fairmoney.model.local.dao.AppDao
 import com.test.fairmoney.model.local.entities.FullUser
+import com.test.fairmoney.model.models.Result
 import com.test.fairmoney.model.remote.ApiService
+import com.test.fairmoney.testing.OpenForTesting
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
+@OpenForTesting
 class UserDetailRepository @Inject constructor(
     private val api: ApiService,
     private val dao: AppDao
 ){
 
-    suspend fun getUser(isConnected: Boolean, userId: String): Pair<FullUser?, String?> {
+    suspend fun getUser(isConnected: Boolean, userId: String): Result<FullUser> {
         val local = getLocalUser(userId)
         return when {
-            local != null -> Pair(first = local, second = null)
+            local != null -> Result(local)
             isConnected -> getRemoteUser(userId)
-            else -> Pair(first = null, second = "No Internet Connection")
+            else -> Result(errorMessage = "No Internet Connection")
         }
     }
 
-    private suspend fun getRemoteUser(userId: String): Pair<FullUser?, String?> {
+    private suspend fun getRemoteUser(userId: String): Result<FullUser> {
         val response = api.getUser(userId)
         return if(response.isSuccessful) {
             if(response.body() != null) {
-                dao.saveFullUser(response.body()!!)
-                Pair(first = response.body()!!, second = null)
+                withContext(Dispatchers.IO) {
+                    dao.saveFullUser(response.body()!!)
+                }
+                Result(response.body())
             }
-            else Pair(first = null, second = "No user found with ID: $userId")
+            else Result(errorMessage = "No user found with ID: $userId")
         } else {
-            Pair(first = null, second = response.errorBody()?.toString() ?: "An error occurred")
+            withContext(Dispatchers.IO) {
+                Result<FullUser>(errorMessage = response.errorBody()?.string() ?: "An error occurred")
+            }
         }
     }
 

@@ -16,10 +16,10 @@ class UserListViewModel @Inject constructor(
     fun getUsers(isConnected: Boolean) {
         loadResult {
             val response = repo.getUsers(isConnected)
-            if (response.first.isNotEmpty()) {
-                _users.postValue(response.first)
+            if (response.data != null) {
+                _users.postValue(response.data)
             } else {
-                throw Exception(response.second ?: "An Error Occurred")
+                throw Exception(response.errorMessage ?: "An Error Occurred")
             }
         }
     }

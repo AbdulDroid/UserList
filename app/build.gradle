@@ -1,8 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.test.fairmoney.testing.OpenClass'
+}
 
 android {
     compileSdkVersion 30
@@ -26,6 +33,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled !project.hasProperty('android.injected.invoked.from.ide')
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -38,6 +48,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+}
+
+jacoco {
+    toolVersion = '0.8.4'
 }
 
 dependencies {
@@ -66,7 +80,11 @@ dependencies {
     )
     testImplementation (
             'junit:junit:4.12',
-            'androidx.room:room-testing:2.2.6'
+            'androidx.room:room-testing:2.2.6',
+            'com.squareup.okhttp3:mockwebserver:3.8.1',
+            'androidx.arch.core:core-testing:2.0.0',
+            'org.mockito:mockito-core:2.25.0',
+            'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2'
     )
     androidTestImplementation(
             'androidx.test.ext:junit:1.1.2',
@@ -76,5 +94,80 @@ dependencies {
             'androidx.room:room-compiler:2.2.6',
             'com.google.dagger:dagger-compiler:2.30.1'
     )
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
+                      '**/*Test*.*', 'android/**/*.*',
+                      '**/*_MembersInjector.class',
+                      '**/Dagger*Component.class',
+                      '**/Dagger*Component$Builder.class',
+                      '**/*_*Factory.class',
+                      '**/*ComponentImpl.class',
+                      '**/*SubComponentBuilder.class']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    task fullCoverageReport(type: JacocoReport) {
+        dependsOn 'createDebugCoverageReport'
+        dependsOn 'testDebugUnitTest'
+        reports {
+            xml.enabled = true
+            html.enabled = true
+        }
+
+        sourceDirectories.setFrom(files([mainSrc]))
+        classDirectories.setFrom(files([debugTree]))
+        executionData.from = fileTree(dir: "$buildDir", includes: [
+                "jacoco/testDebugUnitTest.exec",
+                "outputs/code-coverage/connected/*coverage.ec"
+        ])
+    }
+
+    // Task declaration
+    task fullTestCoverageVerification(type: JacocoCoverageVerification) {
+        // Run only after the test reports are generated
+        dependsOn = ['fullCoverageReport']
+        enabled = true
+        sourceDirectories.setFrom(files([mainSrc]))
+        classDirectories.setFrom(files([debugTree]))
+        executionData.from = fileTree(dir: project.buildDir, includes: [
+                'jacoco/testDebugUnitTest.exec',
+                'outputs/code_coverage/debugAndroidTest/connected/*.ec'
+        ])
+
+        violationRules {
+            failOnViolation = true
+            // 1
+            rule {
+                enabled = true
+                element = 'PACKAGE'
+                includes = ['com.test.fairmoney.model.repositories']
+                limit {
+                    counter = 'CLASS'
+                    value = 'MISSEDCOUNT'
+                    maximum = 0
+                }
+            }
+            // 2
+            rule {
+                element = 'PACKAGE'
+                includes = ['com.test.fairmoney']
+                limit {
+                    value = 'COVEREDRATIO'
+                    counter = 'INSTRUCTION'
+                    minimum = 0.8
+                }
+            }
+
+        }
+    }
+
+    check.dependsOn fullTestCoverageVerification
+
+// we need all open to run tests which  a we enable only for debug builds.
+    project.tasks.whenTaskAdded {
+        if (it.name == "testReleaseUnitTest") {
+            it.enabled = false
+        }
+    }
 
 }
