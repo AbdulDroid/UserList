@@ -5,8 +5,6 @@ import com.test.fairmoney.model.local.entities.FullUser
 import com.test.fairmoney.model.models.Result
 import com.test.fairmoney.model.remote.ApiService
 import com.test.fairmoney.testing.OpenForTesting
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +13,7 @@ import javax.inject.Singleton
 class UserDetailRepository @Inject constructor(
     private val api: ApiService,
     private val dao: AppDao
-){
+) {
 
     suspend fun getUser(isConnected: Boolean, userId: String): Result<FullUser> {
         val local = getLocalUser(userId)
@@ -28,18 +26,13 @@ class UserDetailRepository @Inject constructor(
 
     private suspend fun getRemoteUser(userId: String): Result<FullUser> {
         val response = api.getUser(userId)
-        return if(response.isSuccessful) {
-            if(response.body() != null) {
-                withContext(Dispatchers.IO) {
-                    dao.saveFullUser(response.body()!!)
-                }
+        return if (response.isSuccessful) {
+            if (response.body() != null) {
+                dao.saveFullUser(response.body()!!)
                 Result(response.body())
-            }
-            else Result(errorMessage = "No user found with ID: $userId")
+            } else Result(errorMessage = "No user found with ID: $userId")
         } else {
-            withContext(Dispatchers.IO) {
-                Result<FullUser>(errorMessage = response.errorBody()?.string() ?: "An error occurred")
-            }
+            Result(errorMessage = response.errorBody()?.string() ?: "An error occurred")
         }
     }
 
