@@ -1,6 +1,5 @@
 package com.test.fairmoney.model.local
 
-import android.util.Log
 import com.google.gson.Gson
 import com.test.fairmoney.model.local.entities.Location
 import org.junit.Assert.assertEquals
