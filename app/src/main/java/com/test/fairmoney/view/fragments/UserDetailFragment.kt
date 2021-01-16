@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.google.android.material.snackbar.Snackbar
@@ -19,9 +20,7 @@ import com.test.fairmoney.R
 import com.test.fairmoney.model.local.entities.FullUser
 import com.test.fairmoney.model.local.entities.User
 import com.test.fairmoney.utils.formatDate
-import com.test.fairmoney.utils.hasInternet
 import com.test.fairmoney.utils.inject
-import com.test.fairmoney.utils.isConnected
 import com.test.fairmoney.viewmodel.UserDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_loading.*
@@ -56,7 +55,10 @@ class UserDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().toolbar.visibility = View.GONE
+        activity?.toolbar?.visibility = View.GONE
+        back_button.setOnClickListener {
+            findNavController().navigateUp()
+        }
         setViews(args.user)
         setObservers()
     }
@@ -80,16 +82,9 @@ class UserDetailFragment : Fragment() {
     @SuppressLint("DefaultLocale")
     private fun setViews(user: User) = with(user) {
         loader.visibility = View.VISIBLE
-        MainScope().launch {
-            val connected = isConnected(requireContext())
-            var hasActiveInternet = false
-            if (connected)
-                hasActiveInternet = hasInternet()
-
-            viewModel.getUser(connected && hasActiveInternet, userId)
-        }
+        viewModel.getUser(userId)
         user_image.transitionName = userImage
-        Picasso.get().load(userImage).into(user_image)
+        Picasso.get().load(if(userImage == "") null else userImage).into(user_image)
         user_email.transitionName = email
         user_email.text = email
         user_name.text = ("${title.capitalize()}. $firstName $lastName")

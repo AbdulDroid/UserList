@@ -13,9 +13,9 @@ class UserDetailViewModel @Inject constructor(
     private val _user = MutableLiveData<FullUser>()
     val user: LiveData<FullUser> = _user
 
-    fun getUser(isConnected: Boolean, userId: String) {
+    fun getUser(userId: String) {
         loadResult {
-            val response = repo.getUser(isConnected, userId)
+            val response = repo.getUser(userId)
             if (response.data != null) {
                 _user.postValue(response.data)
             } else {

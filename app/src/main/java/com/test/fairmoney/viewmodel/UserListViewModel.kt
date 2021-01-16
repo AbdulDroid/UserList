@@ -13,9 +13,9 @@ class UserListViewModel @Inject constructor(
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
 
-    fun getUsers(isConnected: Boolean) {
+    fun getUsers() {
         loadResult {
-            val response = repo.getUsers(isConnected)
+            val response = repo.getUsers()
             if (response.data != null) {
                 _users.postValue(response.data)
             } else {

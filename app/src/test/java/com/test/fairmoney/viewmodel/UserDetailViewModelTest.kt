@@ -51,13 +51,13 @@ class UserDetailViewModelTest {
     @Test
     fun `viewModel gets data successfully via repository`() {
         runBlocking {
-            `when`(repository.getUser(true, "")).thenReturn(Result(getUser("")))
+            `when`(repository.getUser("")).thenReturn(Result(getUser("")))
 
             viewModel.loading.observeForever(loadingObserver)
             viewModel.error.observeForever(errorObserver)
             viewModel.user.observeForever(dataObserver)
 
-            viewModel.getUser(true, "")
+            viewModel.getUser("")
 
             Thread.sleep(100)
 
@@ -71,7 +71,7 @@ class UserDetailViewModelTest {
     @Test
     fun `viewModel gets error from repository`() {
         runBlocking {
-            `when`(repository.getUser(true, "")).thenReturn(
+            `when`(repository.getUser("")).thenReturn(
                 Result(
                     data = null,
                     errorMessage = "An Error Occurred"
@@ -81,7 +81,7 @@ class UserDetailViewModelTest {
             viewModel.error.observeForever(errorObserver)
             viewModel.user.observeForever(dataObserver)
 
-            viewModel.getUser(true, "")
+            viewModel.getUser("")
 
             Thread.sleep(100)
             verify(loadingObserver).onChanged(true)

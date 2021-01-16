@@ -52,13 +52,13 @@ class UserListViewModelTest {
     @Test
     fun `viewModel successfully fetches user list from repository`() {
         runBlocking {
-            `when`(repository.getUsers(true)).thenReturn(Result(getUsers(5)))
+            `when`(repository.getUsers()).thenReturn(Result(getUsers(5)))
 
             viewModel.loading.observeForever(loadingObserver)
             viewModel.error.observeForever(errorObserver)
             viewModel.users.observeForever(dataObserver)
 
-            viewModel.getUsers(true)
+            viewModel.getUsers()
 
             Thread.sleep(100)
 
@@ -72,13 +72,13 @@ class UserListViewModelTest {
     @Test
     fun `viewModel encounters an error while fetching user list from repository`() {
         runBlocking {
-            `when`(repository.getUsers(true)).thenReturn(Result(null, "An Error Occurred"))
+            `when`(repository.getUsers()).thenReturn(Result(null, "An Error Occurred"))
 
             viewModel.loading.observeForever(loadingObserver)
             viewModel.error.observeForever(errorObserver)
             viewModel.users.observeForever(dataObserver)
 
-            viewModel.getUsers(true)
+            viewModel.getUsers()
 
             Thread.sleep(100)
 

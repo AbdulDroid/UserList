@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.test.fairmoney.App
 import com.test.fairmoney.BuildConfig
+import com.test.fairmoney.model.NetworkState
 import com.test.fairmoney.model.local.AppDatabase
 import com.test.fairmoney.model.local.dao.AppDao
 import com.test.fairmoney.model.remote.ApiService
+import com.test.fairmoney.utils.NetworkStateImpl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -67,5 +69,11 @@ open class AppModule {
     @Singleton
     fun providesAppDao(database: AppDatabase): AppDao {
         return database.appDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesNetworkState(ctx: Context): NetworkState {
+        return NetworkStateImpl(ctx)
     }
 }
