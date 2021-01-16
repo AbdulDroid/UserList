@@ -17,3 +17,14 @@ fun getUsers(count: Int): List<User> {
 fun getUser(id: String): FullUser {
     return fullUser.copy(userId = id)
 }
+
+fun getUserWithData(): User {
+    return user.copy(
+        userId = "0F8JIqi4zwvb77FGz6Wt",
+        lastName = "Fiedler",
+        firstName = "Heinz-Georg",
+        email = "heinz-georg.fiedler@example.com",
+        title = "mr",
+        userImage = "https://randomuser.me/api/portraits/men/81.jpg"
+    )
+}

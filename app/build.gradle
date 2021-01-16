@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -50,10 +49,6 @@ android {
     }
 }
 
-jacoco {
-    toolVersion = '0.8.4'
-}
-
 dependencies {
     implementation(
             fileTree(dir: "libs", include: ["*.jar"]),
@@ -63,7 +58,7 @@ dependencies {
             'com.google.android.material:material:1.2.1',
             'androidx.constraintlayout:constraintlayout:2.0.4',
             'androidx.navigation:navigation-fragment-ktx:2.3.2',
-            'androidx.fragment:fragment-ktx:1.1.0',
+            'androidx.fragment:fragment-ktx:1.2.5',
             'androidx.navigation:navigation-ui-ktx:2.3.2',
             'com.squareup.retrofit2:retrofit:2.6.0',
             'com.squareup.retrofit2:converter-gson:2.6.0',
@@ -78,100 +73,34 @@ dependencies {
             'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
             'androidx.recyclerview:recyclerview:1.2.0-alpha06'
     )
+    debugImplementation (
+            'androidx.fragment:fragment-testing:1.2.5',
+            'androidx.test:core:1.3.0'
+    )
     testImplementation (
             'junit:junit:4.12',
             'androidx.room:room-testing:2.2.6',
             'com.squareup.okhttp3:mockwebserver:3.8.1',
             'androidx.arch.core:core-testing:2.0.0',
-            'org.mockito:mockito-core:2.25.0',
+            'org.mockito:mockito-core:3.3.0',
             'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2'
     )
     androidTestImplementation(
             'androidx.test.ext:junit:1.1.2',
             'androidx.arch.core:core-testing:2.0.0',
             'androidx.test.espresso:espresso-core:3.3.0',
-            'androidx.test:rules:1.3.1-alpha03',
-            'androidx.test.espresso:espresso-contrib:3.4.0-alpha02'
+            'androidx.test.ext:truth:1.0.0',
+            'com.google.truth:truth:0.42',
+            'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0',
+            'androidx.test:runner:1.3.0',
+            'androidx.test:rules:1.3.0',
+            'org.mockito:mockito-core:3.3.0',
+            'androidx.test.espresso:espresso-contrib:3.4.0-alpha02',
+            'androidx.test.uiautomator:uiautomator:2.2.0'
     )
 
     kapt (
             'androidx.room:room-compiler:2.2.6',
             'com.google.dagger:dagger-compiler:2.30.1'
     )
-
-    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*',
-                      '**/*Test*.*', 'android/**/*.*',
-                      '**/*_MembersInjector.class',
-                      '**/Dagger*Component.class',
-                      '**/Dagger*Component$Builder.class',
-                      '**/*_*Factory.class',
-                      '**/*ComponentImpl.class',
-                      '**/*SubComponentBuilder.class']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    task fullCoverageReport(type: JacocoReport) {
-        dependsOn 'createDebugCoverageReport'
-        dependsOn 'testDebugUnitTest'
-        reports {
-            xml.enabled = true
-            html.enabled = true
-        }
-
-        sourceDirectories.setFrom(files([mainSrc]))
-        classDirectories.setFrom(files([debugTree]))
-        executionData.from = fileTree(dir: "$buildDir", includes: [
-                "jacoco/testDebugUnitTest.exec",
-                "outputs/code-coverage/connected/*coverage.ec"
-        ])
-    }
-
-    // Task declaration
-    task fullTestCoverageVerification(type: JacocoCoverageVerification) {
-        // Run only after the test reports are generated
-        dependsOn = ['fullCoverageReport']
-        enabled = true
-        sourceDirectories.setFrom(files([mainSrc]))
-        classDirectories.setFrom(files([debugTree]))
-        executionData.from = fileTree(dir: project.buildDir, includes: [
-                'jacoco/testDebugUnitTest.exec',
-                'outputs/code_coverage/debugAndroidTest/connected/*.ec'
-        ])
-
-        violationRules {
-            failOnViolation = true
-            // 1
-            rule {
-                enabled = true
-                element = 'PACKAGE'
-                includes = ['com.test.fairmoney.model.repositories']
-                limit {
-                    counter = 'CLASS'
-                    value = 'MISSEDCOUNT'
-                    maximum = 0
-                }
-            }
-            // 2
-            rule {
-                element = 'PACKAGE'
-                includes = ['com.test.fairmoney']
-                limit {
-                    value = 'COVEREDRATIO'
-                    counter = 'INSTRUCTION'
-                    minimum = 0.8
-                }
-            }
-
-        }
-    }
-
-    check.dependsOn fullTestCoverageVerification
-
-// we need all open to run tests which  a we enable only for debug builds.
-    project.tasks.whenTaskAdded {
-        if (it.name == "testReleaseUnitTest") {
-            it.enabled = false
-        }
-    }
-
 }

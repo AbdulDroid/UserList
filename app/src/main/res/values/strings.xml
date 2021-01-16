@@ -11,4 +11,5 @@
     <string name="location">Location:</string>
     <string name="loading_please_wait">Loading, Please wait…</string>
     <string name="gender">Gender: </string>
+    <string name="back_button">Back Button</string>
 </resources>

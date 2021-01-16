@@ -15,12 +15,8 @@ fun String.formatDate(): String {
     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     return try {
         val date = sdf.parse(this)
-        if (date == null)
-            ""
-        else
             SimpleDateFormat("MMM dd yyyy", Locale.getDefault()).format(date)
-    } catch (e: ParseException) {
-        e.printStackTrace()
+    } catch (e: Exception) {
         ""
     }
 }

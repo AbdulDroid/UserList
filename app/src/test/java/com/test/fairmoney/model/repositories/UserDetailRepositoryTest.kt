@@ -1,6 +1,7 @@
 package com.test.fairmoney.model.repositories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.test.fairmoney.model.NetworkState
 import com.test.fairmoney.model.local.AppDatabase
 import com.test.fairmoney.model.local.dao.AppDao
 import com.test.fairmoney.model.local.entities.FullUser
@@ -25,8 +26,9 @@ import retrofit2.Response
 class UserDetailRepositoryTest {
     private lateinit var userDetailRepository: UserDetailRepository
 
-    private val dao = Mockito.mock(AppDao::class.java)
-    private val apiService = Mockito.mock(ApiService::class.java)
+    private val dao = mock(AppDao::class.java)
+    private val apiService = mock(ApiService::class.java)
+    private val network = mock(NetworkState::class.java)
     private val userId = "0F8JIqi4zwvb77FGz6Wt"
 
     @Rule
@@ -38,13 +40,14 @@ class UserDetailRepositoryTest {
         val db = mock(AppDatabase::class.java)
         `when`(db.appDao()).thenReturn(dao)
         `when`(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
-        userDetailRepository = UserDetailRepository(apiService, dao)
+        userDetailRepository = UserDetailRepository(apiService, dao, network)
     }
 
     @Test
     fun getLocalUser() {
         runBlocking {
-            userDetailRepository.getUser(false, "")
+            `when`(network.hasInternet()).thenReturn(false)
+            userDetailRepository.getUser("")
             verify(dao, atLeastOnce()).getUser("")
             verify(apiService, never()).getUser("")
             verifyZeroInteractions(apiService)
@@ -56,7 +59,8 @@ class UserDetailRepositoryTest {
     fun `remote call completes successfully`() {
         runBlocking {
             `when`(apiService.getUser(userId)).thenReturn(Response.success(getUser(userId)))
-            val resp = userDetailRepository.getUser(true, userId)
+            `when`(network.hasInternet()).thenReturn(true)
+            val resp = userDetailRepository.getUser( userId)
             assertNull(resp.errorMessage)
             assertNotNull(resp.data)
             assertThat(resp.data!!.userId, `is`(userId))
@@ -73,7 +77,8 @@ class UserDetailRepositoryTest {
         runBlocking {
             `when`(apiService.getUser(userId)).thenReturn(Response.error(404, ResponseBody.create(
                 MediaType.get("text/plain"), "No User found with such id")))
-            val resp = userDetailRepository.getUser(true, userId)
+            `when`(network.hasInternet()).thenReturn(true)
+            val resp = userDetailRepository.getUser(userId)
             assertNull(resp.data)
             assertNotNull(resp.errorMessage)
             assertThat(resp.errorMessage, `is`("No User found with such id"))

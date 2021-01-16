@@ -18,9 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.test.fairmoney.App
 import com.test.fairmoney.R
 import com.test.fairmoney.model.local.entities.User
-import com.test.fairmoney.utils.hasInternet
 import com.test.fairmoney.utils.inject
-import com.test.fairmoney.utils.isConnected
 import com.test.fairmoney.view.adapter.UserListAdapter
 import com.test.fairmoney.viewmodel.UserListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,7 +48,7 @@ class UserListFragment : Fragment(), UserListAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().toolbar.visibility = View.VISIBLE
+        activity?.toolbar?.visibility = View.VISIBLE
         with(userList) {
             postponeEnterTransition()
             viewTreeObserver.addOnPreDrawListener {
@@ -60,14 +58,7 @@ class UserListFragment : Fragment(), UserListAdapter.OnItemClickListener {
             setHasFixedSize(true)
         }
         loader.visibility = View.VISIBLE
-        MainScope().launch {
-            val connected = isConnected(requireContext())
-            var hasActiveInternet = false
-            if (connected)
-                hasActiveInternet = hasInternet()
-
-            viewModel.getUsers(connected && hasActiveInternet)
-        }
+        viewModel.getUsers()
         setObservers()
     }
 
