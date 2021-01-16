@@ -3,7 +3,6 @@ package com.test.fairmoney.utils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 

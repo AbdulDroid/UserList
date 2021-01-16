@@ -6,9 +6,7 @@ import com.test.fairmoney.model.local.entities.User
 import com.test.fairmoney.model.models.Result
 import com.test.fairmoney.model.repositories.UserListRepository
 import com.test.fairmoney.utils.getUsers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
@@ -38,9 +36,12 @@ class UserListViewModelTest {
     @Mock
     lateinit var repository: UserListRepository
 
-    lateinit var viewModel: UserListViewModel
+    private lateinit var viewModel: UserListViewModel
+    @ObsoleteCoroutinesApi
     private val threadContext = newSingleThreadContext("UI thread")
 
+    @ObsoleteCoroutinesApi
+    @ExperimentalCoroutinesApi
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)

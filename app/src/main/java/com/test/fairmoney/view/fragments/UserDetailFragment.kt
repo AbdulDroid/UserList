@@ -25,8 +25,6 @@ import com.test.fairmoney.viewmodel.UserDetailViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_loading.*
 import kotlinx.android.synthetic.main.fragment_user_detail.*
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
