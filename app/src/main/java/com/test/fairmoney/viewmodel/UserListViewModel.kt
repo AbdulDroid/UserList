@@ -13,13 +13,13 @@ class UserListViewModel @Inject constructor(
     private val _users = MutableLiveData<List<User>>()
     val users: LiveData<List<User>> = _users
 
-    fun getUsers(isConnected: Boolean) {
+    fun getUsers() {
         loadResult {
-            val response = repo.getUsers(isConnected)
-            if (response.first.isNotEmpty()) {
-                _users.postValue(response.first)
+            val response = repo.getUsers()
+            if (response.data != null) {
+                _users.postValue(response.data)
             } else {
-                throw Exception(response.second ?: "An Error Occurred")
+                throw Exception(response.errorMessage ?: "An Error Occurred")
             }
         }
     }

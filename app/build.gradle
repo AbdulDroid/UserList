@@ -2,7 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.test.fairmoney.testing.OpenClass'
+}
 
 android {
     compileSdkVersion 30
@@ -26,6 +32,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled !project.hasProperty('android.injected.invoked.from.ide')
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -49,7 +58,7 @@ dependencies {
             'com.google.android.material:material:1.2.1',
             'androidx.constraintlayout:constraintlayout:2.0.4',
             'androidx.navigation:navigation-fragment-ktx:2.3.2',
-            'androidx.fragment:fragment-ktx:1.1.0',
+            'androidx.fragment:fragment-ktx:1.2.5',
             'androidx.navigation:navigation-ui-ktx:2.3.2',
             'com.squareup.retrofit2:retrofit:2.6.0',
             'com.squareup.retrofit2:converter-gson:2.6.0',
@@ -64,17 +73,33 @@ dependencies {
             'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
             'androidx.recyclerview:recyclerview:1.2.0-alpha06'
     )
+    debugImplementation (
+            'androidx.fragment:fragment-testing:1.2.5',
+            'androidx.test:core:1.3.0'
+    )
     testImplementation (
             'junit:junit:4.12',
-            'androidx.room:room-testing:2.2.6'
+            'androidx.room:room-testing:2.2.6',
+            'com.squareup.okhttp3:mockwebserver:3.8.1',
+            'androidx.arch.core:core-testing:2.0.0',
+            'org.mockito:mockito-core:3.3.0',
+            'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2'
     )
     androidTestImplementation(
             'androidx.test.ext:junit:1.1.2',
-            'androidx.test.espresso:espresso-core:3.3.0'
+            'androidx.arch.core:core-testing:2.0.0',
+            'androidx.test.espresso:espresso-core:3.3.0',
+            'androidx.test.ext:truth:1.0.0',
+            'com.google.truth:truth:0.42',
+            'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0',
+            'androidx.test:runner:1.3.0',
+            'androidx.test:rules:1.3.0',
+            'org.mockito:mockito-core:3.3.0',
+            'androidx.test.espresso:espresso-contrib:3.4.0-alpha02'
     )
+
     kapt (
             'androidx.room:room-compiler:2.2.6',
             'com.google.dagger:dagger-compiler:2.30.1'
     )
-
 }
