@@ -62,7 +62,7 @@ open class AppModule {
     @Provides
     @Singleton
     fun providesAppDatabase(context: Context) : AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, "spotter_base_db").fallbackToDestructiveMigration().build()
+        return Room.databaseBuilder(context, AppDatabase::class.java, "user_list_db").fallbackToDestructiveMigration().build()
     }
 
     @Provides
