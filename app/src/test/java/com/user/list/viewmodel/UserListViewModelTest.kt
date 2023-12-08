@@ -37,7 +37,6 @@ class UserListViewModelTest {
     lateinit var repository: UserListRepository
 
     private lateinit var viewModel: UserListViewModel
-    @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     @ObsoleteCoroutinesApi
     private val threadContext = newSingleThreadContext("UI thread")
 
@@ -45,7 +44,7 @@ class UserListViewModelTest {
     @ExperimentalCoroutinesApi
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
+        MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(threadContext)
         viewModel = UserListViewModel(repository)
     }
@@ -66,7 +65,7 @@ class UserListViewModelTest {
 
             verify(loadingObserver).onChanged(true)
             verify(dataObserver).onChanged(getUsers(5))
-            verifyNoInteractions(errorObserver)
+            verifyZeroInteractions(errorObserver)
             verify(loadingObserver).onChanged(false)
         }
     }
@@ -86,7 +85,7 @@ class UserListViewModelTest {
 
             verify(loadingObserver).onChanged(true)
             verify(errorObserver).onChanged("An Error Occurred")
-            verifyNoInteractions(dataObserver)
+            verifyZeroInteractions(dataObserver)
             verify(loadingObserver).onChanged(false)
         }
     }

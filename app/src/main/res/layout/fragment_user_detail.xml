@@ -244,6 +244,7 @@
         app:constraint_referenced_ids="location,location_head,reg_date,reg_date_head,dob,dob_head,phone_head,phone,gender,gender_head" />
 
     <include
+        android:id="@+id/container"
         layout="@layout/content_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

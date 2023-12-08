@@ -2,6 +2,7 @@ package com.user.list.di
 
 import android.content.Context
 import androidx.room.Room
+import com.user.list.App
 import com.user.list.BuildConfig
 import com.user.list.model.NetworkState
 import com.user.list.model.local.AppDatabase

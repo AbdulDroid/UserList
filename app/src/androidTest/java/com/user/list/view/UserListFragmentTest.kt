@@ -15,6 +15,7 @@ import com.user.list.R
 import com.user.list.util.RecyclerViewMatcher
 import com.user.list.view.adapter.UserListAdapter
 import com.user.list.view.fragments.UserListFragment
+import kotlinx.android.synthetic.main.content_loading.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -33,7 +34,7 @@ class UserListFragmentTest {
         scenario = launchFragmentInContainer<UserListFragment>(Bundle.EMPTY, R.style.AppTheme)
         scenario.onFragment {
 //            fragment = it
-            it.binding.container.progress.indeterminateDrawable = ColorDrawable(Color.BLUE)
+            it.progress.indeterminateDrawable = ColorDrawable(Color.BLUE)
         }
     }
 

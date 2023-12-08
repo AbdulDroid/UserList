@@ -6,9 +6,7 @@ import com.user.list.model.local.entities.FullUser
 import com.user.list.model.models.Result
 import com.user.list.model.repositories.UserDetailRepository
 import com.user.list.utils.getUser
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
@@ -22,7 +20,6 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
 @RunWith(JUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class UserDetailViewModelTest {
 
     @Rule
@@ -42,12 +39,11 @@ class UserDetailViewModelTest {
     lateinit var repository: UserDetailRepository
 
     private lateinit var viewModel: UserDetailViewModel
-    @OptIn(DelicateCoroutinesApi::class)
     private val threadContext = newSingleThreadContext("UI thread")
 
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
+        MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(threadContext)
         viewModel = UserDetailViewModel(repository)
     }
@@ -67,7 +63,7 @@ class UserDetailViewModelTest {
 
             verify(loadingObserver).onChanged(true)
             verify(dataObserver).onChanged(FullUser(""))
-            verifyNoInteractions(errorObserver)
+            verifyZeroInteractions(errorObserver)
             verify(loadingObserver).onChanged(false)
         }
     }
@@ -90,7 +86,7 @@ class UserDetailViewModelTest {
             Thread.sleep(100)
             verify(loadingObserver).onChanged(true)
             verify(errorObserver).onChanged("An Error Occurred")
-            verifyNoInteractions(dataObserver)
+            verifyZeroInteractions(dataObserver)
             verify(loadingObserver).onChanged(false)
         }
     }

@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.user.list.R
 import com.user.list.util.getUserWithData
 import com.user.list.view.fragments.UserDetailFragment
+import kotlinx.android.synthetic.main.content_loading.*
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +27,7 @@ class UserDetailFragmentTest {
             fragmentArgs = args,
             themeResId = R.style.AppTheme
         ).onFragment {
-            it.binding.container.progress.indeterminateDrawable = ColorDrawable(Color.BLUE)
+            it.progress.indeterminateDrawable = ColorDrawable(Color.BLUE)
         }
     }
 

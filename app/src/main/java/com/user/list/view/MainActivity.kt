@@ -2,6 +2,7 @@ package com.user.list.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.user.list.App
 import com.user.list.R
 import com.user.list.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
