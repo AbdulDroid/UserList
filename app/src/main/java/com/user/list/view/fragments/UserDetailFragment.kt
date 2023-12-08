@@ -33,7 +33,7 @@ class UserDetailFragment : Fragment() {
     private val viewModel: UserDetailViewModel by viewModels()
     private var _binding: FragmentUserDetailBinding? = null
 
-    private val binding
+    val binding
         get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {

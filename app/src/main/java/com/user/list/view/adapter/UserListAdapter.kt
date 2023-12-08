@@ -11,7 +11,6 @@ import com.user.list.R
 import com.user.list.databinding.UserListItemBinding
 import com.user.list.model.local.entities.User
 import com.user.list.utils.capitalize
-import java.util.Locale
 
 class UserListAdapter(private val users: List<User>, private val listener: OnItemClickListener) :
     RecyclerView.Adapter<UserListAdapter.ViewHolder>() {

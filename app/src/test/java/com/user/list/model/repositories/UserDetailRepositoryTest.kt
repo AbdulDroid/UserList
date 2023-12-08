@@ -8,10 +8,12 @@ import com.user.list.model.local.entities.FullUser
 import com.user.list.model.remote.ApiService
 import com.user.list.utils.getUser
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.*
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +41,7 @@ class UserDetailRepositoryTest {
         val db = mock(AppDatabase::class.java)
         `when`(db.appDao()).thenReturn(dao)
         `when`(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
-        userDetailRepository = UserDetailRepository(apiService, dao, network)
+        userDetailRepository = UserDetailRepositoryImpl(apiService, dao, network)
     }
 
     @Test
@@ -49,8 +51,8 @@ class UserDetailRepositoryTest {
             userDetailRepository.getUser("")
             verify(dao, atLeastOnce()).getUser("")
             verify(apiService, never()).getUser("")
-            verifyZeroInteractions(apiService)
-            verifyZeroInteractions(dao)
+            verifyNoInteractions(apiService)
+            verifyNoInteractions(dao)
         }
     }
 
@@ -66,16 +68,17 @@ class UserDetailRepositoryTest {
             verify(dao, atLeastOnce()).getUser(userId)
             verify(apiService, atLeastOnce()).getUser(userId)
             verify(dao, atLeastOnce()).saveFullUser(FullUser(userId))
-            verifyZeroInteractions(dao)
-            verifyZeroInteractions(apiService)
+            verifyNoInteractions(dao)
+            verifyNoInteractions(apiService)
         }
     }
 
     @Test
     fun `remote call fails`() {
         runBlocking {
-            `when`(apiService.getUser(userId)).thenReturn(Response.error(404, ResponseBody.create(
-                MediaType.get("text/plain"), "No User found with such id")))
+            `when`(apiService.getUser(userId)).thenReturn(Response.error(404,
+                "No User found with such id".toResponseBody("text/plain".toMediaType())
+            ))
             `when`(network.hasInternet()).thenReturn(true)
             val resp = userDetailRepository.getUser(userId)
             assertNull(resp.data)
@@ -84,8 +87,8 @@ class UserDetailRepositoryTest {
             verify(dao, atLeastOnce()).getUser(userId)
             verify(apiService, atLeastOnce()).getUser(userId)
             verify(dao, never()).saveFullUser(FullUser(userId))
-            verifyZeroInteractions(dao)
-            verifyZeroInteractions(apiService)
+            verifyNoInteractions(dao)
+            verifyNoInteractions(apiService)
         }
     }
 }

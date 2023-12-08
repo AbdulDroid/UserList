@@ -8,11 +8,11 @@ import com.user.list.model.models.UserResponse
 import com.user.list.model.remote.ApiService
 import com.user.list.utils.getUsers
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +39,7 @@ class UserListRepositoryTest {
         val db = mock(AppDatabase::class.java)
         `when`(db.appDao()).thenReturn(dao)
         `when`(db.runInTransaction(ArgumentMatchers.any())).thenCallRealMethod()
-        userListRepository = UserListRepository(apiService, dao, network)
+        userListRepository = UserListRepositoryImpl(apiService, dao, network)
     }
 
     @Test
@@ -49,8 +49,8 @@ class UserListRepositoryTest {
             userListRepository.getUsers()
             verify(dao, atLeastOnce()).getUsers()
             verify(apiService, never()).getUsers()
-            verifyZeroInteractions(dao)
-            verifyZeroInteractions(apiService)
+            verifyNoInteractions(dao)
+            verifyNoInteractions(apiService)
         }
     }
 
@@ -63,7 +63,7 @@ class UserListRepositoryTest {
             verify(apiService, atLeastOnce()).getUsers()
             verify(dao, atMost(1)).getUsers()
             verify(dao, never()).saveUsers(emptyList())
-            verifyZeroInteractions(dao)
+            verifyNoInteractions(dao)
         }
     }
 
@@ -86,7 +86,7 @@ class UserListRepositoryTest {
             verify(apiService, atLeastOnce()).getUsers()
             verify(dao, atLeastOnce()).getUsers()
             verify(dao, atLeastOnce()).saveUsers(getUsers(5))
-            verifyZeroInteractions(dao)
+            verifyNoInteractions(dao)
         }
     }
 
@@ -95,9 +95,8 @@ class UserListRepositoryTest {
         runBlocking {
             `when`(apiService.getUsers()).thenReturn(
                 Response.error(
-                    404, ResponseBody.create(
-                        MediaType.get("text/plain"), "Invalid App ID"
-                    )
+                    404, "Invalid App ID"
+                        .toResponseBody("text/plain".toMediaType())
                 )
             )
             `when`(network.hasInternet()).thenReturn(true)
@@ -107,8 +106,8 @@ class UserListRepositoryTest {
             verify(dao, atLeastOnce()).getUsers()
             verify(apiService, atLeastOnce()).getUsers()
             verify(dao, never()).saveUsers(emptyList())
-            verifyZeroInteractions(dao)
-            verifyZeroInteractions(apiService)
+            verifyNoInteractions(dao)
+            verifyNoInteractions(apiService)
         }
     }
 }

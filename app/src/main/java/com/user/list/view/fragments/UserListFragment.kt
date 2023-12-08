@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +19,6 @@ import com.user.list.view.MainActivity
 import com.user.list.view.adapter.UserListAdapter
 import com.user.list.viewmodel.UserListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -31,7 +29,7 @@ class UserListFragment : Fragment(), UserListAdapter.OnItemClickListener {
     private val viewModel: UserListViewModel by viewModels()
     private var _binding: FragmentUserListBinding? = null
 
-    private val binding
+    val binding
         get() = _binding!!
 
     override fun onCreateView(
