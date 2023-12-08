@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">User List</string>
+
+    <string name="first_fragment_label">User List Fragment</string>
+    <string name="second_fragment_label">User Detail Fragment</string>
+
+    <string name="user_image">User Image</string>
+    <string name="phone">Phone:</string>
+    <string name="dob">Date of Birth:</string>
+    <string name="register_date">Register Date:</string>
+    <string name="location">Location:</string>
+    <string name="loading_please_wait">Loading, Please wait…</string>
+    <string name="gender">Gender: </string>
+    <string name="back_button">Back Button</string>
+    <string name="location_text_template">%1$s, %2$s, %3$s, %4$s</string>
+    <string name="username_text_template">%1$s. %2$s %3$s</string>
+</resources>
